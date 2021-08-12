@@ -1,14 +1,15 @@
 class CountdownTimer {
-  constructor() {
+  constructor({ selector, targetDate }) {
     this.refs = {
-     days: document.querySelector('[data-value="days"]'), 
-     hours: document.querySelector('[data-value="hours"]'),
-     mins: document.querySelector('[data-value="mins"]'),
-     secs: document.querySelector('[data-value="secs"]'),
+      days: document.querySelector('[data-value="days"]'),
+      hours: document.querySelector('[data-value="hours"]'),
+      mins: document.querySelector('[data-value="mins"]'),
+      secs: document.querySelector('[data-value="secs"]'),
     };
+    this.selector = selector;
     this.id = null;
-    this.targetDate = new Date("Aug 14, 2021");
-  };
+    this.targetDate = targetDate;
+  }
 
   calc = () => {
     const currentDate = Date.now();
@@ -17,7 +18,7 @@ class CountdownTimer {
     const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
     const secs = Math.floor((time % (1000 * 60)) / 1000);
-  
+
     this.refs.secs.textContent = secs < 10 ? `0${secs}` : secs;
     this.refs.mins.textContent = mins < 10 ? `0${mins}` : mins;
     this.refs.hours.textContent = hours < 10 ? `0${hours}` : hours;
@@ -30,17 +31,22 @@ class CountdownTimer {
     ) {
       clearInterval(this.id);
       alert("YOU WIN");
-    };
+    }
   };
 
-   countStart = () =>{
+  countStart = () => {
     this.id = setInterval(this.calc, 1000);
   };
-  
-};
+}
 
-const timer = new CountdownTimer()
+const timer = new CountdownTimer({
+  selector: "#timer-1",
+  targetDate: new Date("Aug 14, 2021"),
+});
+
 window.addEventListener("DOMContentLoaded", timer.countStart);
+const timerTarget = `До даты ${timer.targetDate}осталось:`;
+document.querySelector(".timer").insertAdjacentHTML("beforebegin", timerTarget);
 
 // const refs = {
 //   days: document.querySelector('[data-value="days"]'),
